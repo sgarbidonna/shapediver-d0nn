@@ -1,48 +1,32 @@
-import { 
-  createSession,
-  createViewport, 
-  BUSY_MODE_DISPLAY, 
-  FLAG_TYPE, 
-  SPINNER_POSITIONING, 
-  VISIBILITY_MODE 
-} from "@shapediver/viewer";
+import { BUSY_MODE_DISPLAY, createSession, createViewport, FLAG_TYPE, SPINNER_POSITIONING, VISIBILITY_MODE } from "@shapediver/viewer";
 
-// we put all of our code here in an IIFE to allow the "await" statement of promises
 (async () => {
+    const canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
+    canvasElement.style.backgroundColor = "white";
 
-  // we read out the canvas element of the index.html file
-  const canvasElement = document.getElementById("canvas") as HTMLCanvasElement;
+    const viewport = await createViewport({
+        canvas: canvasElement,
+        visibility: VISIBILITY_MODE.MANUAL,
+        branding:{
+            /* logo:null, 
+            backgroundColor: "#FFFFFF",
+            spinnerPositioning: SPINNER_POSITIONING.BOTTOM_LEFT,
+            busyModeDisplay: BUSY_MODE_DISPLAY.SPINNER,
+            */
+        },
+        id: "Test-Donni-Viewport1"  /*unique id of my viewport and session*/
+    })
 
-  // we create a viewport with the canvas element we just read out
-  // additionally we adjust some optional properties to change the style of the viewport
-  const viewport = await createViewport({
-    canvas: canvasElement,
-    visibility: VISIBILITY_MODE.MANUAL,
-    branding: {
-      logo: "https://viewer.shapediver.com/v3/youtube/video1/catAstronaut.png",
-      backgroundColor: "#008800",
-      spinnerPositioning: SPINNER_POSITIONING.BOTTOM_LEFT,
-      busyModeSpinner: "https://viewer.shapediver.com/v3/youtube/video1/subscribe.gif",
-      busyModeDisplay: BUSY_MODE_DISPLAY.SPINNER
-    },
-    id: "YouTubeViewport1"
-  })
+    const session = await createSession({
+        ticket: "8f3e8c87b953e698033335c697ffe750fc71a58caab67c6cb6de2d24d9d469cae8ff481761b66790b5ea539faca89e570d6a18925727423ad4132a24ad6cfe8d5c8c5f676588145805842d98d7ec4d2a77eb6b5a965e3090796489959337164a872ca36e2e0e2efe36a824ba6c01c222a7df751241f94313-d4beefd5882b0bf59e3d1e54b42e8d54",
+        modelViewUrl: "https://sdr7euc1.eu-central-1.shapediver.com",
+        initialParameterValues: {
+            /* "06353841-58a1-41e8-966c-6ba817cce062": "10" */
+        },
+        id: "Test-Donni-Session1" 
+    })
 
-  // we create a session with the ticket and modelViewUrl of a model on the ShapeDiver platform
-  // we additionally adjust some optional properties
-  const session = await createSession({
-    ticket: "90377527eeeafdd35ed9c698d21b100d4c7388444aac60838be7ff176eed6b979a8c92632db8f3e96d76c913b5ee0c4ea4bec0908aed7b0fd358b690dd3dc23b39d86476293d56fab2f1ed07615095b459ee9c9e68f9718488a22111dbfb54e0d3f6b315174a46-15abf4140442e14d3fb0095c438c5939",
-    modelViewUrl: "https://sdeuc1.eu-central-1.shapediver.com",
-    initialParameterValues: {
-      "de76cade-0cea-47b1-879e-1a0b717910e1": "2"
-    },
-    id: "YouTubeSession1"
-  })
+    viewport.show = true;
+    /* viewport.addFlag(FLAG_TYPE.BUSY_MODE)*/ 
 
-  // once everything is set up, we show the viewport (when setting the visibility of the viewport to SESSION, this call is not needed)
-  viewport.show = true;
-
-  // we add a flag to always show the busy mode
-  // this is just done to show the gif
-  viewport.addFlag(FLAG_TYPE.BUSY_MODE)
 })();
